@@ -1,6 +1,14 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/theme-provider";
+import { NavMenu } from "@/components/Navbar/nav-menu";
+import { NavigationSheet } from "@/components/Navbar/navigation-sheet";
+import { Github } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/Navbar/logo";
+import { ModeToggle } from "@/components/theme-toggle";
+import { Footer } from "@/components/Footer/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,11 +31,43 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <nav className="h-16 bg-background border-b">
+            {/* Make the inner container relative so we can absolutely center the desktop NavMenu */}
+            <div className="container mx-auto px-4 h-full relative flex items-center justify-between">
+              <Logo />
+
+              {/* Desktop Menu: absolutely centered on md+ while hidden on small screens */}
+              <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2">
+                <NavMenu />
+              </div>
+
+              <div className="flex items-center gap-3">
+                <Button variant="secondary">
+                  <Github className="mr-2" />
+                  Star on Github
+                </Button>
+                <ModeToggle />
+
+                {/* Mobile Menu */}
+                <div className="md:hidden">
+                  <NavigationSheet />
+                </div>
+              </div>
+            </div>
+          </nav>
+          {children}
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );
