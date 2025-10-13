@@ -14,17 +14,23 @@ import {
 import { useEffect, useMemo, useState } from "react";
 
 interface CLIExampleProps {
-  commands?: CLICommand[];
+  cliInstallUrl?: string;
   initialCommand?: CLICommand["label"];
 }
 
-const CLIExample = ({ commands, initialCommand }: CLIExampleProps) => {
-  const commandList = useMemo(() => {
-    if (commands && commands.length > 0) {
-      return commands;
+const CLIExample = ({ cliInstallUrl, initialCommand }: CLIExampleProps) => {
+  // Generate commands dynamically if cliInstallUrl is provided
+  const commandList: CLICommand[] = useMemo(() => {
+    if (cliInstallUrl) {
+      return [
+        { label: "pnpm", code: `pnpm dlx shadcn@latest add ${cliInstallUrl}` },
+        { label: "npm", code: `npx shadcn@latest add ${cliInstallUrl}` },
+        { label: "yarn", code: `yarn shadcn@latest add ${cliInstallUrl}` },
+        { label: "bun", code: `bunx --bun shadcn@latest add ${cliInstallUrl}` },
+      ];
     }
     return DEFAULT_CLI_COMMANDS;
-  }, [commands]);
+  }, [cliInstallUrl]);
 
   const defaultLabel = useMemo(() => {
     if (

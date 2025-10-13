@@ -50,10 +50,16 @@ export default function Home() {
             <Link href="/collection">
               <Button>Browse Collection</Button>
             </Link>
-            <Button variant="secondary">
-              <Github className="mr-2" />
-              Star on Github
-            </Button>
+            <Link
+              href="https://github.com/Neliq/ux-bits"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Button variant="secondary">
+                <Github className="mr-2" />
+                Star on Github
+              </Button>
+            </Link>
           </div>
         </section>
         <Hero />

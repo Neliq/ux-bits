@@ -3,8 +3,16 @@ import CodeExample from "@/components/code";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  DEFAULT_CLI_COMMANDS,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
   collectionExampleSlugs,
   getCollectionExample,
 } from "@/lib/collection-examples";
@@ -50,13 +58,14 @@ export default async function CollectionExamplePage({ params }: PageProps) {
     whyItWorks,
     highlight,
     quickStart,
-    cliCommands,
+    cliInstallUrl,
+    propsTable,
     codeExamplePath,
   } = example;
 
-  const commands =
-    cliCommands && cliCommands.length > 0 ? cliCommands : DEFAULT_CLI_COMMANDS;
+  // No longer need to compute commands, just use cliInstallUrl
   const quickStartSteps = quickStart.steps ?? [];
+  const propsTableRows = propsTable?.props ?? [];
 
   return (
     <main className="container mx-auto px-4 pt-8">
@@ -176,30 +185,55 @@ export default async function CollectionExamplePage({ params }: PageProps) {
       {highlight && (
         <>
           <ChevronsDown className="mx-auto mt-8 size-16 animate-bounce text-muted" />
-          <Card
-            className={cn(
-              "mx-auto mt-16 flex flex-col items-center justify-center gap-6 bg-secondary p-10 text-center",
-              highlight.cardClassName
+          <Tabs defaultValue="preview" className="mx-auto w-full">
+            <div className="flex items-center justify-between">
+              <TabsList>
+                <TabsTrigger value="preview">
+                  {highlight.previewLabel ?? "Preview"}
+                </TabsTrigger>
+                {highlight.codePath && (
+                  <TabsTrigger value="code">
+                    {highlight.codeLabel ?? "Code"}
+                  </TabsTrigger>
+                )}
+              </TabsList>
+            </div>
+            <TabsContent value="preview" className="mt-4">
+              <Card
+                className={cn(
+                  "w-full bg-secondary p-10",
+                  highlight.cardClassName
+                )}
+              >
+                <div className="flex flex-col gap-6">
+                  {highlight.heading && (
+                    <h2 className="text-2xl font-semibold text-foreground text-center">
+                      {highlight.heading}
+                    </h2>
+                  )}
+                  {highlight.description && (
+                    <p className="text-sm text-secondary-foreground text-center">
+                      {highlight.description}
+                    </p>
+                  )}
+                  <div className="flex justify-center">
+                    {highlight.render()}
+                  </div>
+                </div>
+              </Card>
+            </TabsContent>
+            {highlight.codePath && (
+              <TabsContent value="code" className="mt-4">
+                <CodeExample path={highlight.codePath} />
+              </TabsContent>
             )}
-          >
-            {highlight.heading && (
-              <h3 className="text-2xl font-semibold text-foreground">
-                {highlight.heading}
-              </h3>
-            )}
-            {highlight.description && (
-              <p className="max-w-2xl text-sm text-secondary-foreground">
-                {highlight.description}
-              </p>
-            )}
-            <div className="w-full">{highlight.render()}</div>
-          </Card>
+          </Tabs>
         </>
       )}
 
       <ChevronsDown className="mx-auto mt-8 size-16 animate-bounce text-muted" />
 
-      <CLIExample commands={commands} />
+      <CLIExample cliInstallUrl={cliInstallUrl} />
 
       <Card className="mx-auto mt-8 p-8">
         <h2 className="flex items-center gap-2 text-2xl font-semibold text-foreground">
@@ -220,9 +254,55 @@ export default async function CollectionExamplePage({ params }: PageProps) {
         )}
       </Card>
 
+      {propsTableRows.length > 0 && (
+        <Card className="mx-auto mt-8 p-8">
+          <h2 className="text-2xl font-semibold text-foreground">
+            {propsTable?.title ?? "Component Props"}
+          </h2>
+          {propsTable?.description && (
+            <p className="mt-4 max-w-3xl text-sm text-secondary-foreground">
+              {propsTable.description}
+            </p>
+          )}
+          <div className="mt-6">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Prop</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Required</TableHead>
+                  <TableHead className="min-w-[16rem]">Description</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {propsTableRows.map((row) => (
+                  <TableRow key={row.name}>
+                    <TableCell className="font-mono text-sm">
+                      {row.name}
+                    </TableCell>
+                    <TableCell className="font-mono text-sm text-muted-foreground">
+                      {row.type}
+                    </TableCell>
+                    <TableCell className="text-sm">
+                      {row.required ? "Required" : "Optional"}
+                    </TableCell>
+                    <TableCell className="text-sm text-secondary-foreground">
+                      {row.description}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </Card>
+      )}
+
       {codeExamplePath && (
         <>
           <ChevronsDown className="mx-auto mt-8 size-16 animate-bounce text-muted" />
+          <h2 className="text-2xl font-semibold text-foreground mb-4">
+            Source Code
+          </h2>
           <CodeExample path={codeExamplePath} />
         </>
       )}

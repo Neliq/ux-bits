@@ -18,7 +18,7 @@ export const ComponentCard = ({ example }: ComponentCardProps) => {
       aria-label={`View ${title}`}
       className="block transition-all hover:scale-[1.025]"
     >
-      <Card className="flex w-full flex-col overflow-hidden border-none bg-transparent p-0 shadow-none">
+      <Card className="flex w-full flex-col border-none bg-transparent p-0 shadow-none">
         <CardHeader
           className={cn(
             "relative h-64 w-full overflow-hidden rounded-xl border-1 border-border px-0",
