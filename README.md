@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ux bits
 
-## Getting Started
+**A collection of UX-focused React components built with [shadcn/ui](https://ui.shadcn.com/), designed for rapid integration and best practices.**
 
-First, run the development server:
+---
+
+## ✨ Features
+
+- **UX-Focused**: Curated components that follow modern UX patterns and accessibility best practices.
+- **Built with shadcn/ui**: Leverages the power and flexibility of the shadcn/ui component system.
+- **Easy CLI Installation**: Add components to your project in seconds using the CLI.
+- **Customizable & Production-Ready**: Easily theme and extend components to fit your needs.
+- **Growing Library**: New components and improvements added regularly.
+
+## 🚀 Installation
+
+You can easily install any component from this collection using the shadcn/ui CLI:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npx shadcn@latest add https://ux.koszyka.com/r/<component-name>.json
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Replace `<component-name>` with the name of the component you want to add (e.g., `WordsCountingCard`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📦 Usage
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+After installation, simply import and use the component in your project:
 
-## Learn More
+```tsx
+import { WordsCountingCard } from "@/Bits/WordsCountingCard";
 
-To learn more about Next.js, take a look at the following resources:
+export default function Example() {
+  return (
+    <WordsCountingCard
+      href="/utilities/sample-article"
+      title="Sample Article"
+      description="Some description goes here"
+      image="/sample-thumbnail.png"
+      className="max-w-lg w-full"
+    />
+  );
+}
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Explore the `Bits/` and `Examples/` directories for more ready-to-use components!
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🤝 Contributing
 
-## Deploy on Vercel
+Contributions are welcome! If you have a UX component or improvement to share, please open an issue or submit a pull request.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Fork the repo and create your branch from `main`.
+2. Follow the coding style and conventions used in the repo (shadcn/ui best practices).
+3. Add source code to /Bits directory.
+4. Add example usage to /Examples directory.
+5. Append /lib/collection-examples.tsx with docs.
+6. Submit your PR for review.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+If you have an idea for component open new issue.
+
+1. Provide example site using the solution
+2. Add description explaining behavior / appearance / usage
+
+## 📄 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.

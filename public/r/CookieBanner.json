@@ -1,0 +1,15 @@
+{
+  "name": "CookieBanner",
+  "type": "registry:ui",
+  "registryDependencies": ["accordion", "button", "dialog", "switch"],
+  "files": [
+    {
+      "path": "Bits/CookieBanner.tsx",
+      "type": "registry:ui"
+    },
+    {
+      "path": "lib/cookie-manager.ts",
+      "type": "registry:lib"
+    }
+  ]
+}

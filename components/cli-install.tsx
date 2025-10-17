@@ -60,6 +60,7 @@ const CLIExample = ({ cliInstallUrl, initialCommand }: CLIExampleProps) => {
         </SnippetTabsList>
         {activeCommand && (
           <SnippetCopyButton
+            className="text-primary"
             onCopy={() =>
               console.log(`Copied "${activeCommand.code}" to clipboard`)
             }
@@ -73,7 +74,11 @@ const CLIExample = ({ cliInstallUrl, initialCommand }: CLIExampleProps) => {
         )}
       </SnippetHeader>
       {commandList.map((command) => (
-        <SnippetTabsContent key={command.label} value={command.label}>
+        <SnippetTabsContent
+          key={command.label}
+          value={command.label}
+          className="text-primary"
+        >
           {command.code}
         </SnippetTabsContent>
       ))}

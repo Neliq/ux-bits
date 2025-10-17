@@ -61,11 +61,17 @@ export default async function CollectionExamplePage({ params }: PageProps) {
     cliInstallUrl,
     propsTable,
     codeExamplePath,
+    codeExamplePaths,
   } = example;
 
   // No longer need to compute commands, just use cliInstallUrl
   const quickStartSteps = quickStart.steps ?? [];
   const propsTableRows = propsTable?.props ?? [];
+
+  // Determine which code examples to show
+  const codeExamples =
+    codeExamplePaths ||
+    (codeExamplePath ? [{ label: "Source Code", path: codeExamplePath }] : []);
 
   return (
     <main className="container mx-auto px-4 pt-8">
@@ -240,13 +246,8 @@ export default async function CollectionExamplePage({ params }: PageProps) {
           <SquareDashedMousePointer />
           {quickStart.title ?? "Quick Start"}
         </h2>
-        {quickStart.description && (
-          <p className="mt-4 max-w-3xl text-sm text-secondary-foreground">
-            {quickStart.description}
-          </p>
-        )}
         {quickStartSteps.length > 0 && (
-          <ul className="mt-6 space-y-2 text-sm text-secondary-foreground">
+          <ul className="space-y-2 text-sm text-secondary-foreground">
             {quickStartSteps.map((step) => (
               <li key={step}>{step}</li>
             ))}
@@ -259,12 +260,7 @@ export default async function CollectionExamplePage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold text-foreground">
             {propsTable?.title ?? "Component Props"}
           </h2>
-          {propsTable?.description && (
-            <p className="mt-4 max-w-3xl text-sm text-secondary-foreground">
-              {propsTable.description}
-            </p>
-          )}
-          <div className="mt-6">
+          <div>
             <Table>
               <TableHeader>
                 <TableRow>
@@ -297,13 +293,34 @@ export default async function CollectionExamplePage({ params }: PageProps) {
         </Card>
       )}
 
-      {codeExamplePath && (
+      {codeExamples.length > 0 && (
         <>
           <ChevronsDown className="mx-auto mt-8 size-16 animate-bounce text-muted" />
           <h2 className="text-2xl font-semibold text-foreground mb-4">
             Source Code
           </h2>
-          <CodeExample path={codeExamplePath} />
+          {codeExamples.length === 1 ? (
+            <CodeExample path={codeExamples[0].path} />
+          ) : (
+            <Tabs defaultValue={codeExamples[0].path} className="w-full">
+              <TabsList className="w-full justify-start">
+                {codeExamples.map((example) => (
+                  <TabsTrigger key={example.path} value={example.path}>
+                    {example.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+              {codeExamples.map((example) => (
+                <TabsContent
+                  key={example.path}
+                  value={example.path}
+                  className="mt-4"
+                >
+                  <CodeExample path={example.path} />
+                </TabsContent>
+              ))}
+            </Tabs>
+          )}
         </>
       )}
     </main>

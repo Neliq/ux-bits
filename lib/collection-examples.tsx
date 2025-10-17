@@ -2,6 +2,7 @@ import type { ClassValue } from "clsx";
 import type { ReactNode } from "react";
 
 import { renderWordCountingShowcase } from "@/Examples/WordCountingCardExample";
+import { renderCookieBannerShowcase } from "@/Examples/CookieBannerExample";
 
 export type CLICommand = {
   label: string;
@@ -52,7 +53,6 @@ export type CollectionExample = {
   };
   quickStart: {
     title?: string;
-    description?: string;
     steps?: string[];
   };
   cliInstallUrl?: string;
@@ -66,7 +66,11 @@ export type CollectionExample = {
       required?: boolean;
     }[];
   };
-  codeExamplePath: string;
+  codeExamplePath?: string;
+  codeExamplePaths?: {
+    label: string;
+    path: string;
+  }[];
 };
 
 export const DEFAULT_CLI_COMMANDS: CLICommand[] = [
@@ -106,16 +110,18 @@ export const collectionExamples: CollectionExample[] = [
     },
     whyItWorks: {
       description:
-        "Omarchy leverages responsive layouts and real-time analytics to surface metrics ahead of engagement, helping teams reduce churn and improve content quality.",
+        "Helps users make informed decisions about content engagement by showing the time commitment upfront. This reduces friction and manages expectations before the click, therefore reducing bouce rate.",
       keyBenefits: [
-        "Highlights word counts inline so writers can gauge scope instantly.",
-        "Keeps the interface lightweight by calculating metrics server-side.",
-        "Adapts to any CMS thanks to client-agnostic UI primitives.",
+        "Users can estimate reading time before committing",
+        "Reduces bounce rate by setting proper expectations",
+        "Helps users prioritize content based on available time",
+        "Builds trust through transparency",
       ],
       perfectFor: [
-        "Editorial dashboards that coach contributors.",
-        "Knowledge bases tracking structured content goals.",
-        "Product education flows with progressive disclosure.",
+        "Documentation sites with varying article lengths.",
+        "Blog post listings.",
+        "Educational content libraries.",
+        "News aggregators.",
       ],
     },
     highlight: {
@@ -124,7 +130,6 @@ export const collectionExamples: CollectionExample[] = [
     },
     quickStart: {
       title: "Quick Start",
-      description: "Roll out the preview pattern in minutes.",
       steps: [
         "1. Install component with dependencies using the CLI command above.",
         "2. Use <WordsCountingCard /> component in your codebase.",
@@ -134,8 +139,6 @@ export const collectionExamples: CollectionExample[] = [
     cliInstallUrl: "https://ux.koszyka.com/r/WordsCountingCard.json",
     propsTable: {
       title: "WordsCountingCard Props",
-      description:
-        "Use these props to tailor the preview card to your content workflow.",
       props: [
         {
           name: "href",
@@ -171,6 +174,99 @@ export const collectionExamples: CollectionExample[] = [
       ],
     },
     codeExamplePath: "Bits/WordsCountingCard.tsx",
+  },
+  {
+    slug: "cookie-banner",
+    title: "GDPR Cookie Consent Banner",
+    summary: "A non-frustrating cookie banner that actually manages cookies.",
+    source: "Vercel",
+    tags: ["Privacy", "GDPR", "Cookie Management", "Compliance"],
+    heroLogo: {
+      src: "/vercel-logo.png",
+      alt: "Vercel Logo",
+      width: 200,
+      height: 200,
+      wrapperClassName: "size-48",
+      className:
+        "w-full h-full bg-secondary border-border border-1 rounded-xl p-8",
+    },
+    tagline:
+      "Full-featured cookie consent with automatic detection and real cookie management.",
+    features: [
+      "Auto-detects cookies",
+      "GDPR Compliant",
+      "Actually deletes cookies",
+      "Blocks tracking scripts",
+    ],
+    externalLink: {
+      url: "https://vercel.com/",
+      label: "Original example from Vercel",
+    },
+    previewImage: {
+      src: "/vercel-thumb.png",
+      alt: "Cookie consent interface",
+      width: 1200,
+      height: 800,
+    },
+    whyItWorks: {
+      description:
+        "Unlike basic cookie banners that only show a UI, this component actually manages cookies by detecting them, categorizing them, and deleting non-consented cookies in real-time. It integrates with Google Analytics consent mode and other tracking scripts.",
+      keyBenefits: [
+        "Automatically detects all cookies in your application",
+        "Actually enforces user consent by deleting cookies",
+        "Integrates with Google Analytics Consent Mode",
+        "Shows live count of cookies per category",
+        "Plug-and-play - just add to your layout",
+        "Stores preferences across sessions",
+      ],
+      perfectFor: [
+        "Any website that needs GDPR compliance",
+        "Applications with analytics tracking",
+        "Sites with marketing cookies",
+        "Privacy-conscious applications",
+      ],
+    },
+    highlight: {
+      heading: "See It In Action",
+      description:
+        "The banner automatically detects cookies and lets users control them by category. Clear your browser cookies to see the initial banner.",
+      render: renderCookieBannerShowcase,
+      codePath: "Examples/CookieBannerExample.tsx",
+    },
+    quickStart: {
+      title: "Quick Start",
+      steps: [
+        "1. Install the component using the CLI command above.",
+        "2. Add <CookieBanner /> to your root layout.",
+        "3. Customize cookie categories in lib/cookie-manager.ts if needed.",
+        "4. The component will automatically detect and manage all cookies.",
+      ],
+    },
+    cliInstallUrl: "https://ux.koszyka.com/r/CookieBanner.json",
+    propsTable: {
+      title: "Configuration",
+      description:
+        "The Cookie Banner works out of the box with no props required. Customize by editing DEFAULT_COOKIE_CONFIGS in lib/cookie-manager.ts.",
+      props: [
+        {
+          name: "DEFAULT_COOKIE_CONFIGS",
+          type: "CookieConfig[]",
+          description:
+            "Array of cookie configurations that define which cookies belong to which category. Edit in lib/cookie-manager.ts.",
+          required: false,
+        },
+      ],
+    },
+    codeExamplePaths: [
+      {
+        label: "CookieBanner.tsx",
+        path: "Bits/CookieBanner.tsx",
+      },
+      {
+        label: "cookie-manager.ts",
+        path: "lib/cookie-manager.ts",
+      },
+    ],
   },
 ];
 

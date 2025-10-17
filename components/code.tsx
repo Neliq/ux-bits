@@ -15,6 +15,7 @@ import {
   CodeBlockSelectTrigger,
   CodeBlockSelectValue,
 } from "@/components/code-block";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import React, { useEffect, useState } from "react";
 
 interface CodeExampleProps {
@@ -115,15 +116,17 @@ const CodeExample = ({ path }: CodeExampleProps) => {
           onError={() => console.error("Failed to copy code to clipboard")}
         />
       </CodeBlockHeader>
-      <CodeBlockBody>
-        {(item) => (
-          <CodeBlockItem key={item.language} value={item.language}>
-            <CodeBlockContent language={item.language as BundledLanguage}>
-              {item.code}
-            </CodeBlockContent>
-          </CodeBlockItem>
-        )}
-      </CodeBlockBody>
+      <ScrollArea className="h-[512px] w-full">
+        <CodeBlockBody>
+          {(item) => (
+            <CodeBlockItem key={item.language} value={item.language}>
+              <CodeBlockContent language={item.language as BundledLanguage}>
+                {item.code}
+              </CodeBlockContent>
+            </CodeBlockItem>
+          )}
+        </CodeBlockBody>
+      </ScrollArea>
     </CodeBlock>
   );
 };
