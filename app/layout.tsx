@@ -28,6 +28,7 @@ export const metadata: Metadata = {
 };
 
 import Script from "next/script";
+import CookieBanner from "@/Bits/CookieBanner";
 
 export default function RootLayout({
   children,
@@ -90,6 +91,7 @@ export default function RootLayout({
               </div>
             </div>
           </nav>
+          <CookieBanner />
           {children}
           <Footer />
         </ThemeProvider>

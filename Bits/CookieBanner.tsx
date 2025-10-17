@@ -78,7 +78,11 @@ function buildConsents(value: boolean): ConsentMap {
   );
 }
 
-export function CookieBanner() {
+export interface CookieBannerProps {
+  preview?: boolean;
+}
+
+export function CookieBanner({ preview = false }: CookieBannerProps) {
   const [isBannerVisible, setIsBannerVisible] = React.useState(false);
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const [consents, setConsents] = React.useState<ConsentMap>(defaultConsents);
@@ -94,6 +98,11 @@ export function CookieBanner() {
   // Load stored consent and detect cookies
   React.useEffect(() => {
     if (typeof window === "undefined") return;
+
+    if (preview === true) {
+      setIsBannerVisible(true);
+      return;
+    }
 
     try {
       const stored = getStoredConsent();
@@ -119,7 +128,7 @@ export function CookieBanner() {
       console.error("Failed to parse cookie consent state", error);
       setIsBannerVisible(true);
     }
-  }, []);
+  }, [preview]);
 
   // Update cookie stats when dialog opens
   React.useEffect(() => {
@@ -171,6 +180,141 @@ export function CookieBanner() {
     return null;
   }
 
+  // If preview, render as a static block element (not fixed/floating)
+  if (preview) {
+    return (
+      <div className="relative w-full max-w-sm rounded-2xl border bg-background p-5 shadow-xl sm:w-[360px] mx-auto my-8">
+        <Button
+          size="icon"
+          variant="ghost"
+          aria-label="Close banner"
+          className="absolute right-4 top-4 rounded-md border border-transparent p-2 text-muted-foreground transition hover:border-border hover:text-foreground"
+          onClick={handleRejectAll}
+        >
+          <XIcon className="size-4" />
+        </Button>
+
+        <div className="space-y-4">
+          <p
+            id="cookie-banner-title"
+            className="text-sm text-muted-foreground mr-4"
+          >
+            This site uses tracking technologies. You may opt in or opt out of
+            the use of these technologies.
+          </p>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <Button size="sm" variant="outline" onClick={handleRejectAll}>
+              Deny
+            </Button>
+            <Button size="sm" onClick={handleAcceptAll}>
+              Accept all
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="px-2 text-primary hover:bg-transparent hover:underline"
+              onClick={() => setIsDialogOpen(true)}
+            >
+              Consent Settings
+            </Button>
+          </div>
+        </div>
+
+        {/* Dialog for consent settings (still available in preview) */}
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent className="sm:max-w-lg">
+            <DialogHeader className="gap-3 text-left">
+              <DialogTitle className="sr-only">Cookie preferences</DialogTitle>
+              <DialogDescription className="text-sm text-muted-foreground">
+                This site uses tracking technologies. You may opt in or opt out
+                of the use of these technologies.
+              </DialogDescription>
+            </DialogHeader>
+
+            <Accordion
+              type="multiple"
+              className="mt-4 divide-y rounded-lg border"
+            >
+              {CONSENT_CATEGORIES.map((category) => {
+                const switchId = `cookie-toggle-${category.key}`;
+
+                return (
+                  <AccordionItem
+                    key={category.key}
+                    value={category.key}
+                    className="border-border/70 px-4"
+                  >
+                    <div className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
+                      <AccordionTrigger className="flex-1 items-center justify-between gap-3 px-0 py-0 text-left text-base font-semibold hover:no-underline focus-visible:ring-offset-0 [&_svg]:hidden">
+                        <span className="flex items-center gap-2">
+                          {category.label}
+                          {cookieStats[category.key] > 0 && (
+                            <span className="text-xs font-normal text-muted-foreground">
+                              ({cookieStats[category.key]} cookie
+                              {cookieStats[category.key] !== 1 ? "s" : ""})
+                            </span>
+                          )}
+                        </span>
+                      </AccordionTrigger>
+
+                      <div className="flex items-center gap-3">
+                        <Switch
+                          id={switchId}
+                          checked={consents[category.key]}
+                          disabled={category.required}
+                          onCheckedChange={(checked) =>
+                            handleToggleChange(category.key, checked)
+                          }
+                        />
+                        <label
+                          htmlFor={switchId}
+                          className="text-sm font-medium text-muted-foreground"
+                        >
+                          {consents[category.key] ? "On" : "Off"}
+                        </label>
+                      </div>
+                    </div>
+
+                    <AccordionContent className="px-0 pb-4 text-sm leading-relaxed text-muted-foreground">
+                      {category.description}
+                    </AccordionContent>
+                  </AccordionItem>
+                );
+              })}
+            </Accordion>
+
+            <div className="mt-6 flex flex-wrap items-center gap-2">
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={handleSavePreferences}
+              >
+                Save
+              </Button>
+              <Button size="sm" variant="outline" onClick={handleRejectAll}>
+                Deny
+              </Button>
+              <Button size="sm" onClick={handleAcceptAll}>
+                Accept all
+              </Button>
+              <Link
+                href="https://vercel.com/legal/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-primary hover:underline"
+              >
+                Privacy Policy
+              </Link>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+    );
+  }
+
+  // Default: floating/fixed banner
   return (
     <>
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -268,19 +412,20 @@ export function CookieBanner() {
         className="fixed bottom-0 left-0 z-50 flex justify-start px-4 pb-4 sm:px-6"
       >
         <div className="relative w-full max-w-sm rounded-2xl border bg-background p-5 shadow-xl sm:w-[360px]">
-          <button
-            type="button"
+          <Button
+            size="icon"
+            variant="ghost"
             aria-label="Close banner"
             className="absolute right-4 top-4 rounded-md border border-transparent p-2 text-muted-foreground transition hover:border-border hover:text-foreground"
             onClick={handleRejectAll}
           >
             <XIcon className="size-4" />
-          </button>
+          </Button>
 
           <div className="space-y-4">
             <p
               id="cookie-banner-title"
-              className="text-sm text-muted-foreground"
+              className="text-sm text-muted-foreground mr-4"
             >
               This site uses tracking technologies. You may opt in or opt out of
               the use of these technologies.
