@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 
 import { renderWordCountingShowcase } from "@/Examples/WordCountingCardExample";
 import { renderCookieBannerShowcase } from "@/Examples/CookieBannerExample";
+import { renderMultiFormatPhoneNumberShowcase } from "@/Examples/MultiFormatPhoneNumberExample";
 
 export type CLICommand = {
   label: string;
@@ -265,6 +266,72 @@ export const collectionExamples: CollectionExample[] = [
       {
         label: "cookie-manager.ts",
         path: "lib/cookie-manager.ts",
+      },
+    ],
+  },
+  {
+    slug: "multi-format-phone-number",
+    title: "Multi-format Phone Number Form",
+    summary:
+      "Collect global phone numbers without forcing a strict format upfront.",
+    source: "UX Bits",
+    tags: ["Forms", "Internationalization", "Validation"],
+    heroLogo: {
+      src: "/favicon.svg",
+      alt: "UX Bits logo",
+      width: 200,
+      height: 200,
+      wrapperClassName: "size-48",
+      className:
+        "w-full h-full bg-secondary border border-border rounded-xl p-6",
+    },
+    tagline:
+      "Parse country codes directly from what users type or from a quick selector.",
+    features: [
+      "Supports typed or selected country codes",
+      "Normalizes whitespace automatically",
+      "Guards against invalid characters",
+    ],
+    previewImage: {
+      src: "/phone-format-thumb.png",
+      alt: "Phone number form preview",
+      width: 1200,
+      height: 800,
+    },
+    whyItWorks: {
+      description:
+        "Combining a country picker with forgiving input parsing means customers can share their number the way they naturally would while you still receive clean, structured data.",
+      keyBenefits: [
+        "Accepts numbers with or without spaces",
+        "Extracts country codes from typed input automatically",
+        "Prevents alphabetic or special characters from slipping through",
+      ],
+      perfectFor: [
+        "Multi-region signup and onboarding flows.",
+        "Support intake or call-back request forms.",
+        "Checkout experiences that require a contact number.",
+      ],
+    },
+    highlight: {
+      heading: "See The Parsing In Action",
+      description:
+        "Pick a country or type an international number like +44 7700 900123 to watch the component normalise it.",
+      render: renderMultiFormatPhoneNumberShowcase,
+      codePath: "Examples/MultiFormatPhoneNumberExample.tsx",
+    },
+    quickStart: {
+      title: "Quick Start",
+      steps: [
+        "1. Install the component using the CLI command above.",
+        "2. Drop <PhoneNumberForm /> into any form that captures phone numbers.",
+        "3. Extend the `countries` list to cover every market you support.",
+      ],
+    },
+    cliInstallUrl: "https://ux.koszyka.com/r/MultiFormatPhoneNumber.json",
+    codeExamplePaths: [
+      {
+        label: "MultiFormatPhoneNumber.tsx",
+        path: "Bits/MultiFormatPhoneNumber.tsx",
       },
     ],
   },
